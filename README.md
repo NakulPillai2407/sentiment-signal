@@ -6,6 +6,9 @@ An interactive Streamlit app that pulls live news for a user-chosen set of ticke
 
 Built as a portfolio project for Quantitative Analyst / Financial Technology roles, rebuilt from a university Computational Economics coursework script into a live, interactive tool.
 
+## Live Demo
+* *
+
 ## Overview
 
 This project started as a university coursework script for a Computational Economics module. The original version:
