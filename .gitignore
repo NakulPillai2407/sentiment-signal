@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+nltk_data/
+.streamlit/secrets.toml
+.claude/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+.ipynb_checkpoints/
