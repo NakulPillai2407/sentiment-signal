@@ -7,7 +7,7 @@ An interactive Streamlit app that pulls live news for a user-chosen set of ticke
 Built as a portfolio project for Quantitative Analyst / Financial Technology roles, rebuilt from a university Computational Economics coursework script into a live, interactive tool.
 
 ## Live Demo
-*https://nakul-sentiment-signal.streamlit.app/*
+https://nakul-sentiment-signal.streamlit.app/
 
 ## Overview
 
