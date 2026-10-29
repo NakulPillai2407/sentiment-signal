@@ -6,6 +6,8 @@ An interactive Streamlit app that pulls live news for a user-chosen set of ticke
 
 Built as a portfolio project for Quantitative Analyst / Financial Technology roles. Originally a university Computational Economics coursework script, rebuilt here as a live, interactive tool.
 
+> **Looking for a proper backtest?** The backtest in this app is illustrative: no trading costs, a small live sample and no held-out period. The rigorous version of the same idea is a separate project, [news-sentiment-research](https://github.com/NakulPillai2407/news-sentiment-research): two pre-registered studies (daily news, and intraday news with exact release times) with costs and a held-out final year. Both find that sentiment does not give a tradable edge after costs. It is part of [Holdout Research](https://nakulpillai2407.github.io).
+
 ## Live Demo
 
 [https://nakul-sentiment-signal.streamlit.app/](https://nakul-sentiment-signal.streamlit.app/)
@@ -23,7 +25,7 @@ This app rebuilds the pipeline end to end: a finance-tuned sentiment model in pl
 - Computes both raw and benchmark-adjusted ("abnormal") returns, flat or beta-scaled market-model, to isolate firm-specific price impact from market-wide moves
 - Runs full OLS inference (`statsmodels`) on sentiment vs. abnormal return: t-statistics, p-values, 95% confidence intervals, and an F-test, not just a slope and an R²
 - User-toggleable winsorization (1st/99th percentile capping, not silent deletion) for outlier handling
-- Includes an illustrative sentiment-threshold long/short backtest, explicit about its lack of transaction costs, slippage, and small sample size
+- Includes an illustrative sentiment-threshold long/short backtest, explicit about its lack of transaction costs, slippage, and small sample size (for a costed, out-of-sample test see [news-sentiment-research](https://github.com/NakulPillai2407/news-sentiment-research))
 - A Model Diagnostics tab comparing FinBERT vs. VADER head-to-head (agreement rates, relative regression strength)
 - A dedicated, permanent Limitations & Methodology Notes tab rather than a buried caveat paragraph
 - One-time fetch per session via `st.session_state`, so switching tabs or tweaking a slider never re-hits the network
@@ -38,7 +40,7 @@ This app rebuilds the pipeline end to end: a finance-tuned sentiment model in pl
 | Return type | Raw only | Raw and benchmark-adjusted ("abnormal") return |
 | Outliers | Hardcoded `df.drop(80)` | User-toggleable winsorization (1st/99th pct, capped not deleted) |
 | Regression | `sklearn` (slope, intercept, R² only) | `statsmodels` OLS: t-stats, p-values, 95% CIs, F-test |
-| Backtest | None | Illustrative sentiment-threshold long/short backtest |
+| Backtest | None | Illustrative sentiment-threshold long/short backtest (no costs; the costed version is in [news-sentiment-research](https://github.com/NakulPillai2407/news-sentiment-research)) |
 | Limitations | Brief conclusion paragraph | Dedicated, permanent tab |
 
 Abnormal returns are used because a stock's raw daily return is mostly driven by how the whole market moved that day, not by firm-specific news. A market-wide 2% rally will show up as a positive return on every stock in the universe regardless of whether that stock had any news at all. Abnormal return subtracts out the market's move (flat subtraction of the benchmark's return, or a beta-scaled version via a simple rolling market-model regression) to isolate the part of the move plausibly attributable to the stock's own news. See `analysis/returns.py` for the full derivation and the trade-offs between the two approaches.
@@ -100,13 +102,13 @@ Usage: open the Setup & Universe tab, pick a preset index subset or type your ow
 
 - Sector-level breakdown: does the sentiment-return relationship differ by sector (e.g. cyclicals vs. defensives)?
 - A real risk-free rate series for the Sharpe ratio instead of a flat approximate rate, and proper trading-calendar-aware annualization instead of simple period-count scaling.
-- Transaction-cost-adjusted backtesting with a real position-sizing model, instead of the current flat equal-weight, cost-free illustration.
-- A larger, longer-running sample collected over weeks/months rather than a single on-demand pull. Sample size is the single biggest limitation of the current version, and this would materially improve the statistical power of every regression.
+- Transaction-cost-adjusted backtesting. This was done separately in [news-sentiment-research](https://github.com/NakulPillai2407/news-sentiment-research), which tests the signal with a 10 bps cost on a held-out year. The app's own backtest remains a cost-free illustration.
+- A larger, longer-running sample collected over weeks/months rather than a single on-demand pull. Sample size is the single biggest limitation of this app, and it is why the larger studies in [news-sentiment-research](https://github.com/NakulPillai2407/news-sentiment-research) use tens of thousands of articles.
 - Independent verification of news timestamp integrity, to rule out the lookahead-bias risk flagged in the Limitations tab (checking whether Yahoo Finance summaries are ever edited post-publication).
 
 ## Limitations
 
-This backtest and regression analysis is illustrative only: small sample sizes (a single on-demand pull, typically well under a few hundred articles/trades), no transaction costs or slippage in the backtest, and no causal identification in the regression (a statistically significant slope shows correlation, not that sentiment causes returns). See the in-app Limitations & Methodology Notes tab for the full set of caveats before drawing any conclusions from its output.
+This backtest and regression analysis is illustrative only: small sample sizes (a single on-demand pull, typically well under a few hundred articles/trades), no transaction costs or slippage in the backtest, and no causal identification in the regression (a statistically significant slope shows correlation, not that sentiment causes returns). See the in-app Limitations & Methodology Notes tab for the full set of caveats before drawing any conclusions from its output. For results you can lean on, use [news-sentiment-research](https://github.com/NakulPillai2407/news-sentiment-research).
 
 This is a research/portfolio tool, not investment advice.
 
